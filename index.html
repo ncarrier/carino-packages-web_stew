@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <body>
+
+    <h1>plop</h1>
+
+    <button type="button"
+            onclick="document.getElementById('demo').innerHTML = Date()">
+      Click me to display Date and Time.
+    </button>
+
+    <p id="demo"></p>
+
+    <script type="text/javascript">
+      if (window.DeviceOrientationEvent) {
+        document.getElementById('demo').innerHTML = "DeviceOrientation is supported";
+      } else {
+        document.getElementById('demo').innerHTML = "DeviceOrientation isn't supported";
+      }
+      window.addEventListener("deviceorientation", function(event) {
+        document.getElementById('demo').innerHTML = event;
+      }, true);
+    </script>
+  </body>
+</html>
+

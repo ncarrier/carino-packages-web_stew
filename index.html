@@ -17,14 +17,42 @@
 
     <p><a href="/clients/">Get the client for your platform.</a></p>
     <script type="text/javascript">
+      var gravity = [0, 0, 0];
+
+      function compute_gravity_vector(x, y, z) {
+        var alpha = 0.8;
+        var norm;
+        var x;
+        var y;
+        var z;
+        var ts;
+
+        /* lowpass filter the gravity vector to filter sudden movements */
+        gravity[0] = alpha * gravity[0] + (1 - alpha) * x;
+        gravity[1] = alpha * gravity[1] + (1 - alpha) * y;
+        gravity[2] = alpha * gravity[2] + (1 - alpha) * z;
+
+        /* normalize the gravity vector */
+        norm = Math.sqrt(Math.pow(gravity[0], 2)
+                + Math.pow(gravity[1], 2) + Math.pow(gravity[2], 2));
+        x = gravity[0] / norm;
+        y = gravity[1] / norm;
+        z = gravity[2] / norm;
+      }
+
+      window.addEventListener('devicemotion', function(event) {
+        var a = event.accelerationIncludingGravity;
+        compute_gravity_vector(a.x, a.y, a.z);
+
+        document.getElementById('demo').innerHTML = "x = " + gravity[0] +
+            ", y = " + gravity[1] + ", z = " + gravity[2];
+      });
+
       if (window.DeviceOrientationEvent) {
         document.getElementById('demo').innerHTML = "DeviceOrientation is supported";
       } else {
         document.getElementById('demo').innerHTML = "DeviceOrientation isn't supported";
       }
-      window.addEventListener("deviceorientation", function(event) {
-        document.getElementById('demo').innerHTML = event;
-      }, true);
     </script>
   </body>
 </html>

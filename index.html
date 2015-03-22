@@ -6,7 +6,7 @@
 
   <body>
 
-    <h1>plop</h1>
+    <h1 id="title">plop</h1>
 
     <button type="button"
             onclick="document.getElementById('demo').innerHTML = Date()">
@@ -40,14 +40,34 @@
         z = gravity[2] / norm;
       }
 
+      var exampleSocket = new WebSocket("ws://10.10.10.1:54321", "protocol");
+
+      exampleSocket.onopen = function (event) {
+        // called when the socket has been successfully opened
+      };
+
+      exampleSocket.onmessage = function (event) {
+        document.getElementById('title').innerHTML = atob(event.data);
+      }
+
       window.addEventListener('devicemotion', function(event) {
         var a = event.accelerationIncludingGravity;
+        var gravity_string;
+
         compute_gravity_vector(a.x, a.y, a.z);
 
-        document.getElementById('demo').innerHTML = "x = " + gravity[0] +
-            ", y = " + gravity[1] + ", z = " + gravity[2];
+        gravity_string = "x = " + gravity[0] + ", y = " + gravity[1] + ", z = "
+          + gravity[2];
+
+        if (exampleSocket.readyState == WebSocket.OPEN) {
+          exampleSocket.send(btoa(gravity_string + "\n"));
+          document.getElementById('demo').innerHTML = gravity_string;
+        } else {
+          document.getElementById('demo').innerHTML = "not OPEN " + Date();
+        }
       });
 
+      // TODO how to detect properly if we can use DeviceOrientationEvent ?
       if (window.DeviceOrientationEvent) {
         document.getElementById('demo').innerHTML = "DeviceOrientation is supported";
       } else {

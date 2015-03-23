@@ -35,9 +35,9 @@
         /* normalize the gravity vector */
         norm = Math.sqrt(Math.pow(gravity[0], 2)
                 + Math.pow(gravity[1], 2) + Math.pow(gravity[2], 2));
-        x = gravity[0] / norm;
-        y = gravity[1] / norm;
-        z = gravity[2] / norm;
+        gravity[0] = gravity[0] / norm;
+        gravity[1] = gravity[1] / norm;
+        gravity[2] = gravity[2] / norm;
       }
 
       var exampleSocket = new WebSocket("ws://10.10.10.1:54321", "protocol");

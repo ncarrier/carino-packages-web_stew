@@ -56,11 +56,11 @@
 
         compute_gravity_vector(a.x, a.y, a.z);
 
-        gravity_string = "x = " + gravity[0] + ", y = " + gravity[1] + ", z = "
-          + gravity[2];
+        gravity_string = "x = " + gravity[0].toFixed(2) + ", y = " + 
+          gravity[1].toFixed(2) + ", z = " + gravity[2].toFixed(2);
 
         if (exampleSocket.readyState == WebSocket.OPEN) {
-          exampleSocket.send(btoa(gravity_string + "\n"));
+          exampleSocket.send(btoa(gravity_string + "       \r"));
           document.getElementById('demo').innerHTML = gravity_string;
         } else {
           document.getElementById('demo').innerHTML = "not OPEN " + Date();

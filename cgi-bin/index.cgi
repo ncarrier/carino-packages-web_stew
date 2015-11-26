@@ -1,4 +1,4 @@
-#!/bin/luajit
+#!/usr/bin/luajit
 
 o = print
 o "Content-type: text/html"

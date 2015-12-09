@@ -7,7 +7,8 @@ LOCAL_DESCRIPTION := Javascript client controlling the vehicle
 LOCAL_CATEGORY_PATH := controllers
 
 LOCAL_COPY_FILES := \
-	cgi-bin/index.cgi:var/www/cgi-bin/ \
+	js/phaser.min.js:var/www/js/ \
+	js/client.js:var/www/js/ \
 	index.html:var/www/
 
 include $(BUILD_CUSTOM)

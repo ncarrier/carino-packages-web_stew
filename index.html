@@ -2,78 +2,15 @@
 <html>
   <head>
     <meta charset="UTF-8">
+    <title>Web Steering Wheel</title>
+    <style>
+      * { padding: 0; margin: 0; }
+    </style>
+    <script src="js/phaser.min.js"></script>
+    <script src="js/client.js"></script>
   </head>
 
   <body>
-
-    <h1 id="title">plop</h1>
-
-    <button type="button"
-            onclick="document.getElementById('demo').innerHTML = Date()">
-      Click me to display Date and Time.
-    </button>
-
-    <p id="demo"></p>
-
-    <p><a href="/clients/">Get the client for your platform.</a></p>
-    <script type="text/javascript">
-      var gravity = [0, 0, 0];
-
-      function compute_gravity_vector(x, y, z) {
-        var alpha = 0.8;
-        var norm;
-        var x;
-        var y;
-        var z;
-        var ts;
-
-        /* lowpass filter the gravity vector to filter sudden movements */
-        gravity[0] = alpha * gravity[0] + (1 - alpha) * x;
-        gravity[1] = alpha * gravity[1] + (1 - alpha) * y;
-        gravity[2] = alpha * gravity[2] + (1 - alpha) * z;
-
-        /* normalize the gravity vector */
-        norm = Math.sqrt(Math.pow(gravity[0], 2)
-                + Math.pow(gravity[1], 2) + Math.pow(gravity[2], 2));
-        gravity[0] = gravity[0] / norm;
-        gravity[1] = gravity[1] / norm;
-        gravity[2] = gravity[2] / norm;
-      }
-
-      var exampleSocket = new WebSocket("ws://10.10.10.1:54321", "protocol");
-
-      exampleSocket.onopen = function (event) {
-        // called when the socket has been successfully opened
-      };
-
-      exampleSocket.onmessage = function (event) {
-        document.getElementById('title').innerHTML = atob(event.data);
-      }
-
-      window.addEventListener('devicemotion', function(event) {
-        var a = event.accelerationIncludingGravity;
-        var gravity_string;
-
-        compute_gravity_vector(a.x, a.y, a.z);
-
-        gravity_string = "x = " + gravity[0].toFixed(2) + ", y = " + 
-          gravity[1].toFixed(2) + ", z = " + gravity[2].toFixed(2);
-
-        if (exampleSocket.readyState == WebSocket.OPEN) {
-          exampleSocket.send(btoa(gravity_string + "       \r"));
-          document.getElementById('demo').innerHTML = gravity_string;
-        } else {
-          document.getElementById('demo').innerHTML = "not OPEN " + Date();
-        }
-      });
-
-      // TODO how to detect properly if we can use DeviceOrientationEvent ?
-      if (window.DeviceOrientationEvent) {
-        document.getElementById('demo').innerHTML = "DeviceOrientation is supported";
-      } else {
-        document.getElementById('demo').innerHTML = "DeviceOrientation isn't supported";
-      }
-    </script>
   </body>
 </html>
 

@@ -7,6 +7,7 @@ LOCAL_DESCRIPTION := Javascript client controlling the vehicle
 LOCAL_CATEGORY_PATH := controllers
 
 LOCAL_COPY_FILES := \
+	img/center.png:var/www/img/ \
 	img/fullscreen.png:var/www/img/ \
 	js/client.js:var/www/js/ \
 	js/control.js:var/www/js/ \

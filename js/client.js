@@ -22,8 +22,9 @@ function preload()
   game.scale.pageAlignHorizontally = true;
   game.scale.pageAlignVertically = true;
   game.stage.backgroundColor = '#f2fffb';
-  game.load.spritesheet('button', 'img/fullscreen.png', 120, 40);
-  /* disable pinch to zoom */
+  game.load.spritesheet('fullscreen', 'img/fullscreen.png', 120, 40);
+  game.load.spritesheet('center', 'img/center.png', 120, 40);
+    /* disable pinch to zoom */
   window.ontouchstart = function(e){
     e.preventDefault();
     e.stopPropagation();
@@ -44,14 +45,17 @@ function create()
   var firstLeft = ((width / 2) - dim) / 2;
   var secondLeft = firstLeft + (width / 2);
   var spaceKey;
-  var startButton;
+  var centerButton;
   var fullScreenButton;
 
   game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 
-  fullScreenButton = game.add.button(game.world.width * 0.5, game.world.height * 0.5,
-    'button', fullScreen, this, 1, 0, 2);
+  fullScreenButton = game.add.button(width / 2, height / 2, 'fullscreen',
+    fullScreen, this, 1, 0, 2);
   fullScreenButton.anchor.set(0.5);
+  centerButton = game.add.button(width / 2, game.world.height * 0.8, 'center',
+    center, this, 1, 0, 2);
+  centerButton.anchor.set(0.5);
 
   controlLeft = new Control(game, width / 4, height / 2, dim);
   controlRight = new Control(game, (3 * width) / 4, height / 2, dim);
@@ -78,6 +82,10 @@ function center()
 {
   controlLeft.center();
   controlRight.center();
+  game.input.pointer1.x = -1;
+  game.input.pointer1.y = -1;
+  game.input.pointer2.x = -1;
+  game.input.pointer2.y = -1;
 }
 
 function draw()

@@ -96,12 +96,13 @@ function draw()
 
 function updateControlsTouch(pointer)
 {
-  if (controlLeft.isIn(pointer.x, pointer.y)) {
+  if (pointer.isUp)
+    return;
+
+  if (controlLeft.isIn(pointer.x, pointer.y))
     controlLeft.set(pointer.x, pointer.y);
-  }
-  if (controlRight.isIn(pointer.x, pointer.y)) {
+  if (controlRight.isIn(pointer.x, pointer.y))
     controlRight.set(pointer.x, pointer.y);
-  }
 }
 
 function updateControlsKeyboard()

@@ -30,7 +30,7 @@ function preload()
   }
 }
 
-function gofull()
+function fullScreen()
 {
   if (game.scale.isFullScreen)
     game.scale.stopFullScreen();
@@ -44,12 +44,14 @@ function create()
   var firstLeft = ((width / 2) - dim) / 2;
   var secondLeft = firstLeft + (width / 2);
   var spaceKey;
+  var startButton;
+  var fullScreenButton;
 
   game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 
-  startButton = game.add.button(game.world.width * 0.5, game.world.height * 0.5,
-    'button', gofull, this, 1, 0, 2);
-  startButton.anchor.set(0.5);
+  fullScreenButton = game.add.button(game.world.width * 0.5, game.world.height * 0.5,
+    'button', fullScreen, this, 1, 0, 2);
+  fullScreenButton.anchor.set(0.5);
 
   controlLeft = new Control(game, width / 4, height / 2, dim);
   controlRight = new Control(game, (3 * width) / 4, height / 2, dim);

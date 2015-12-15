@@ -47,6 +47,14 @@ Control.prototype.set = function(x, y) {
   this.y = Math.trunc(clip(y, this.centerY, this.hd));
 }
 
+Control.prototype.incrementX = function(delta) {
+  this.set(this.x + delta, this.y);
+}
+
+Control.prototype.incrementY = function(delta) {
+  this.set(this.x, this.y + delta);
+}
+
 Control.prototype.get = function() {
   return [this.x, this.y];
 }

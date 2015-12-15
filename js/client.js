@@ -11,6 +11,11 @@ var controlRight;
 var textStyle = { font: '18px Arial', fill: '#0095DD' };
 var debugText;
 
+var incrementLeftX = 10;
+var incrementLeftY = 10;
+var incrementRightX = 10;
+var incrementRightY = 10;
+
 function preload()
 {
   game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -44,26 +49,31 @@ function create()
   startButton = game.add.button(game.world.width * 0.5, game.world.height * 0.5,
     'button', gofull, this, 1, 0, 2);
   startButton.anchor.set(0.5);
-  debugTextLeft = game.add.text(5, 5, "plop");
-  debugTextRight = game.add.text(width / 2 + 5, 5, "plop");
 
   controlLeft = new Control(game, width / 4, height / 2, dim);
   controlRight = new Control(game, (3 * width) / 4, height / 2, dim);
+
+  // TODO these are dvorak programmer controls
+  // left control
+  game.input.keyboard.addKey(Phaser.Keyboard.PERIOD);
+  game.input.keyboard.addKey(Phaser.Keyboard.O);
+  game.input.keyboard.addKey(Phaser.Keyboard.E);
+  game.input.keyboard.addKey(Phaser.Keyboard.U);
+
+  // left control
+  game.input.keyboard.addKey(Phaser.Keyboard.C);
+  game.input.keyboard.addKey(Phaser.Keyboard.H);
+  game.input.keyboard.addKey(Phaser.Keyboard.T);
+  game.input.keyboard.addKey(Phaser.Keyboard.N);
 }
 
 function draw()
 {
-  var pos;
-
   controlLeft.draw();
   controlRight.draw();
-  pos = controlLeft.get();
-  debugTextLeft.setText(pos[0] + ", " + pos[1]);
-  pos = controlRight.get();
-  debugTextRight.setText(pos[0] + ", " + pos[1]);
 }
 
-function updateControls(pointer)
+function updateControlsTouch(pointer)
 {
   if (controlLeft.isIn(pointer.x, pointer.y)) {
     controlLeft.set(pointer.x, pointer.y);
@@ -73,10 +83,41 @@ function updateControls(pointer)
   }
 }
 
+function updateControlsKeyboard()
+{
+  var control;
+
+  control = controlLeft;
+  if (game.input.keyboard.isDown(Phaser.KeyCode.E))
+    control.incrementY(incrementLeftY);
+  if (game.input.keyboard.isDown(Phaser.KeyCode.PERIOD))
+    control.incrementY(-incrementLeftY);
+  if (game.input.keyboard.isDown(Phaser.KeyCode.U))
+    control.incrementX(incrementLeftX);
+  if (game.input.keyboard.isDown(Phaser.KeyCode.O))
+    control.incrementX(-incrementLeftX);
+
+  control = controlRight;
+  if (game.input.keyboard.isDown(Phaser.KeyCode.T))
+    control.incrementY(incrementLeftY);
+  if (game.input.keyboard.isDown(Phaser.KeyCode.C))
+    control.incrementY(-incrementLeftY);
+  if (game.input.keyboard.isDown(Phaser.KeyCode.N))
+    control.incrementX(incrementLeftX);
+  if (game.input.keyboard.isDown(Phaser.KeyCode.H))
+    control.incrementX(-incrementLeftX);
+}
+
+function handleInput()
+{
+  updateControlsTouch(game.input.pointer1);
+  updateControlsTouch(game.input.pointer2);
+  updateControlsKeyboard();
+}
+
 function update()
 {
-  updateControls(game.input.pointer1);
-  updateControls(game.input.pointer2);
+  handleInput();
   draw();
 }
 

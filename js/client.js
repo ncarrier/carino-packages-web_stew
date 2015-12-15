@@ -43,6 +43,7 @@ function create()
   var top = (height - dim) / 2;
   var firstLeft = ((width / 2) - dim) / 2;
   var secondLeft = firstLeft + (width / 2);
+  var spaceKey;
 
   game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 
@@ -65,6 +66,16 @@ function create()
   game.input.keyboard.addKey(Phaser.Keyboard.H);
   game.input.keyboard.addKey(Phaser.Keyboard.T);
   game.input.keyboard.addKey(Phaser.Keyboard.N);
+
+  // for centering both
+  spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+  spaceKey.onDown.add(center, this);
+}
+
+function center()
+{
+  controlLeft.center();
+  controlRight.center();
 }
 
 function draw()

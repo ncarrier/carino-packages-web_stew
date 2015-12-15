@@ -58,3 +58,8 @@ Control.prototype.incrementY = function(delta) {
 Control.prototype.get = function() {
   return [this.x, this.y];
 }
+
+Control.prototype.center = function()
+{
+  this.set(this.centerX, this.centerY);
+}

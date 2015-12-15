@@ -53,12 +53,14 @@ function create()
 
 function draw()
 {
+  var pos;
+
   controlLeft.draw();
   controlRight.draw();
-  var p = game.input.pointer1;
-  debugTextLeft.setText(Math.trunc(p.x) + ", " + Math.trunc(p.y));
-  p = game.input.pointer2;
-  debugTextRight.setText(Math.trunc(p.x) + ", " + Math.trunc(p.y));
+  pos = controlLeft.get();
+  debugTextLeft.setText(pos[0] + ", " + pos[1]);
+  pos = controlRight.get();
+  debugTextRight.setText(pos[0] + ", " + pos[1]);
 }
 
 function updateControls(pointer)

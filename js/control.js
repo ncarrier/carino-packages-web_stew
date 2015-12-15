@@ -2,12 +2,11 @@ function Control(game, centerX, centerY, dim) {
   this.game = game;
   this.centerX = centerX;
   this.centerY = centerY;
-  this.x = centerX;
-  this.y = centerY;
   this.dim = dim;
   this.hd = dim / 2;
   this.radius = this.dim / 5;
   this.graphics = this.game.add.graphics(0, 0);
+  this.set(centerX, centerY);
 }
 
 Control.prototype.isIn = function(x, y) {
@@ -44,6 +43,10 @@ function clip(val, center, halfSpan) {
 }
 
 Control.prototype.set = function(x, y) {
-  this.x = clip(x, this.centerX, this.hd);
-  this.y = clip(y, this.centerY, this.hd);
+  this.x = Math.trunc(clip(x, this.centerX, this.hd));
+  this.y = Math.trunc(clip(y, this.centerY, this.hd));
+}
+
+Control.prototype.get = function() {
+  return [this.x, this.y];
 }

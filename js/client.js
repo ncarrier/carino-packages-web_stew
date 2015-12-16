@@ -76,6 +76,8 @@ function create()
   // for centering both
   spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
   spaceKey.onDown.add(center, this);
+
+  debugText = game.add.text(5, 5, "plop");
 }
 
 function center()
@@ -137,9 +139,23 @@ function handleInput()
   updateControlsKeyboard();
 }
 
+function sendCommands()
+{
+  var posLeft;
+  var channels;
+
+  posLeft = controlLeft.getIn(1100, 1900);
+  posRight = controlRight.getIn(1100, 1900);
+  channels = [posLeft[0], posLeft[1], posRight[0], posRight[1]];
+
+  debugText.setText(channels[0] + ", " + channels[1] + ", " + channels[2] + ", "
+      + channels[3]);
+}
+
 function update()
 {
   handleInput();
+  sendCommands();
   draw();
 }
 

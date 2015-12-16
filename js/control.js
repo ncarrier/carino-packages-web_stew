@@ -55,8 +55,21 @@ Control.prototype.incrementY = function(delta) {
   this.set(this.x, this.y + delta);
 }
 
-Control.prototype.get = function() {
-  return [this.x, this.y];
+function rescale(val, oldDown, oldUp, newDown, newUp)
+{
+  var inZeroOne = (val - oldDown) / (oldUp - oldDown);
+
+  return Math.trunc(inZeroOne * (newUp - newDown) + newDown);
+}
+
+Control.prototype.getIn = function(down, up) {
+  var newX;
+  var newY;
+
+  newX = rescale(this.x, this.centerX - this.hd, this.centerX + this.hd, down, up);
+  newY = rescale(this.y, this.centerY - this.hd, this.centerY + this.hd, down, up);
+
+  return [newX, newY];
 }
 
 Control.prototype.center = function()

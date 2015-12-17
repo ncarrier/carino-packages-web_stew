@@ -9,12 +9,22 @@ var game = new Phaser.Game(width, height, Phaser.AUTO, null, {
 var controlLeft;
 var controlRight;
 var textStyle = { font: '18px Arial', fill: '#0095DD' };
-var debugText;
+//var debugText;
+var socket;
 
 var incrementLeftX = 10;
 var incrementLeftY = 10;
 var incrementRightX = 10;
 var incrementRightY = 10;
+
+var seqnum = 0;
+var RCINPUT_UDP_NUM_CHANNELS = 8
+var RCINPUT_UDP_VERSION = 2
+
+var bufferSize = 4 /* version */ +
+                 8 /* timestamp_us */ +
+                 2 /* sequence */ +
+                 RCINPUT_UDP_NUM_CHANNELS * 2 /* pwms */;
 
 function preload()
 {
@@ -28,6 +38,13 @@ function preload()
   window.ontouchstart = function(e){
     e.preventDefault();
     e.stopPropagation();
+  }
+//  debugText = game.add.text(5, 5, "plop");
+  try {
+    socket = new WebSocket("ws://10.10.10.1:54321", "protocol");
+    setInterval(sendCommands, 10);
+  } catch (err) {
+    debugText.setText("not connected " + Date.now());
   }
 }
 
@@ -76,14 +93,13 @@ function create()
   // for centering both
   spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
   spaceKey.onDown.add(center, this);
-
-  debugText = game.add.text(5, 5, "plop");
 }
 
 function center()
 {
   controlLeft.center();
   controlRight.center();
+  // TODO remove ?
   game.input.pointer1.x = -1;
   game.input.pointer1.y = -1;
   game.input.pointer2.x = -1;
@@ -139,23 +155,100 @@ function handleInput()
   updateControlsKeyboard();
 }
 
+function numberTo2bytes(number) {
+  return [(number & 0xFF00) >> 8,
+      number & 0xFF]
+}
+
+function numberTo4bytes(number) {
+  return [(number & 0xFF000000) >> 24,
+      (number & 0xFF0000) >> 16,
+      (number & 0xFF00) >> 8,
+      number & 0xFF]
+}
+
+function numberTo8bytes(number) {
+  return [(number & 0xFF00000000000000) >> 56,
+      (number & 0xFF000000000000) >> 48,
+      (number & 0xFF0000000000) >> 40,
+      (number & 0xFF00000000) >> 32,
+      (number & 0xFF000000) >> 24,
+      (number & 0xFF0000) >> 16,
+      (number & 0xFF00) >> 8,
+      number & 0xFF]
+}
+
 function sendCommands()
 {
   var posLeft;
   var channels;
+  var buffer = new Uint8Array(bufferSize);
+  var packet = buffer.buffer;
+  var i;
+  var array;
+  var mode = 1165; // mode 1
+  var offset;
+  var ts = window.performance.now();
 
   posLeft = controlLeft.getIn(1100, 1900);
   posRight = controlRight.getIn(1100, 1900);
   channels = [posLeft[0], posLeft[1], posRight[0], posRight[1]];
 
-  debugText.setText(channels[0] + ", " + channels[1] + ", " + channels[2] + ", "
-      + channels[3]);
+  for (i = 0; i < bufferSize; i++)
+    buffer[i] = 0;
+
+  /* build the packet */
+  /* version */
+  offset = 0;
+  array = numberTo4bytes(RCINPUT_UDP_VERSION);
+  for (i = 0; i < 4; i++)
+    buffer[i + offset] = array[i];
+  offset += 4;
+  /* timestamp_us  */
+  array = numberTo8bytes(Math.trunc(ts * 1000));
+  for (i = 0; i < 8; i++)
+    buffer[i + offset] = array[i];
+  offset += 8;
+  /* seqnum */
+  array = numberTo2bytes(seqnum++);
+  for (i = 0; i < 2; i++)
+    buffer[i + offset] = array[i];
+  offset += 2;
+  /* roll == pwm[0] */
+  array = numberTo2bytes(posRight[0]);
+  for (i = 0; i < 2; i++)
+    buffer[i + offset] = array[i];
+  offset += 2;
+  /* pitch == pwm[1] */
+  array = numberTo2bytes(posRight[1]);
+  for (i = 0; i < 2; i++)
+    buffer[i + offset] = array[i];
+  offset += 2;
+  /* throttle == pwm[2] */
+  array = numberTo2bytes(posLeft[1]);
+  for (i = 0; i < 2; i++)
+    buffer[i + offset] = array[i];
+  offset += 2;
+  /* yaw == pwm[3] */
+  array = numberTo2bytes(posLeft[0]);
+  for (i = 0; i < 2; i++)
+    buffer[i + offset] = array[i];
+  offset += 2;
+  /* mode == pwm[4] */
+  array = numberTo2bytes(mode);
+  for (i = 0; i < 2; i++)
+    buffer[i + offset] = array[i];
+  offset += 2;
+
+  if (socket.readyState == WebSocket.OPEN) {
+    socket.send(btoa(String.fromCharCode.apply(null, buffer)));
+    console.log("send");
+  }
 }
 
 function update()
 {
   handleInput();
-  sendCommands();
   draw();
 }
 

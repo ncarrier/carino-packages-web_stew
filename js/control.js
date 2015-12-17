@@ -27,7 +27,7 @@ Control.prototype.draw = function() {
     this.dim, this.dim);
   this.graphics.endFill();
 
-  this.graphics.lineStyle(2, 0xf9ffd8, 1);
+  this.graphics.lineStyle(2, 0xffe88c, 1);
   this.graphics.beginFill(0xf9ffd8, 0.5);
   this.graphics.drawCircle(this.x, this.y, this.dim / 5);
   this.graphics.endFill();

@@ -9,6 +9,7 @@ LOCAL_CATEGORY_PATH := controllers
 LOCAL_COPY_FILES := \
 	img/center.png:var/www/img/ \
 	img/fullscreen.png:var/www/img/ \
+	js/settings.js:var/www/js/ \
 	js/client.js:var/www/js/ \
 	js/control.js:var/www/js/ \
 	js/phaser.min.js:var/www/js/ \

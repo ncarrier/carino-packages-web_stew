@@ -64,6 +64,7 @@ function create()
   var spaceKey;
   var centerButton;
   var fullScreenButton;
+  var keys = Settings.keys;
 
   game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 
@@ -78,20 +79,17 @@ function create()
   controlRight = new Control(game, (3 * width) / 4, height / 2, dim);
 
   // TODO these are dvorak programmer controls
-  // left control
-  game.input.keyboard.addKey(Phaser.Keyboard.PERIOD);
-  game.input.keyboard.addKey(Phaser.Keyboard.O);
-  game.input.keyboard.addKey(Phaser.Keyboard.E);
-  game.input.keyboard.addKey(Phaser.Keyboard.U);
-
-  // left control
-  game.input.keyboard.addKey(Phaser.Keyboard.C);
-  game.input.keyboard.addKey(Phaser.Keyboard.H);
-  game.input.keyboard.addKey(Phaser.Keyboard.T);
-  game.input.keyboard.addKey(Phaser.Keyboard.N);
+  game.input.keyboard.addKey(keys.roll.increase);
+  game.input.keyboard.addKey(keys.roll.decrease);
+  game.input.keyboard.addKey(keys.pitch.increase);
+  game.input.keyboard.addKey(keys.pitch.decrease);
+  game.input.keyboard.addKey(keys.throttle.increase);
+  game.input.keyboard.addKey(keys.throttle.decrease);
+  game.input.keyboard.addKey(keys.yaw.increase);
+  game.input.keyboard.addKey(keys.yaw.decrease);
 
   // for centering both
-  spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+  spaceKey = game.input.keyboard.addKey(keys.center);
   spaceKey.onDown.add(center, this);
 }
 
@@ -126,25 +124,26 @@ function updateControlsTouch(pointer)
 function updateControlsKeyboard()
 {
   var control;
+  var keys = Settings.keys;
 
   control = controlLeft;
-  if (game.input.keyboard.isDown(Phaser.KeyCode.E))
+  if (game.input.keyboard.isDown(keys.throttle.decrease))
     control.incrementY(incrementLeftY);
-  if (game.input.keyboard.isDown(Phaser.KeyCode.PERIOD))
+  if (game.input.keyboard.isDown(keys.throttle.increase))
     control.incrementY(-incrementLeftY);
-  if (game.input.keyboard.isDown(Phaser.KeyCode.U))
+  if (game.input.keyboard.isDown(keys.yaw.increase))
     control.incrementX(incrementLeftX);
-  if (game.input.keyboard.isDown(Phaser.KeyCode.O))
+  if (game.input.keyboard.isDown(keys.yaw.decrease))
     control.incrementX(-incrementLeftX);
 
   control = controlRight;
-  if (game.input.keyboard.isDown(Phaser.KeyCode.T))
+  if (game.input.keyboard.isDown(keys.pitch.decrease))
     control.incrementY(incrementLeftY);
-  if (game.input.keyboard.isDown(Phaser.KeyCode.C))
+  if (game.input.keyboard.isDown(keys.pitch.increase))
     control.incrementY(-incrementLeftY);
-  if (game.input.keyboard.isDown(Phaser.KeyCode.N))
+  if (game.input.keyboard.isDown(keys.roll.increase))
     control.incrementX(incrementLeftX);
-  if (game.input.keyboard.isDown(Phaser.KeyCode.H))
+  if (game.input.keyboard.isDown(keys.roll.decrease))
     control.incrementX(-incrementLeftX);
 }
 

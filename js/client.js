@@ -155,26 +155,26 @@ function handleInput()
 }
 
 function numberTo2bytes(number) {
-  return [(number & 0xFF00) >> 8,
-      number & 0xFF]
+  return [(number & 0xFF),
+      (number & 0xFF00) >> 8]
 }
 
 function numberTo4bytes(number) {
-  return [(number & 0xFF000000) >> 24,
-      (number & 0xFF0000) >> 16,
+  return [(number & 0xFF),
       (number & 0xFF00) >> 8,
-      number & 0xFF]
+      (number & 0xFF0000) >> 16,
+      (number & 0xFF000000) >> 24]
 }
 
 function numberTo8bytes(number) {
-  return [(number & 0xFF00000000000000) >> 56,
-      (number & 0xFF000000000000) >> 48,
-      (number & 0xFF0000000000) >> 40,
-      (number & 0xFF00000000) >> 32,
-      (number & 0xFF000000) >> 24,
-      (number & 0xFF0000) >> 16,
+  return [(number & 0xFF),
       (number & 0xFF00) >> 8,
-      number & 0xFF]
+      (number & 0xFF0000) >> 16,
+      (number & 0xFF000000) >> 24,
+      (number & 0xFF00000000) >> 32,
+      (number & 0xFF0000000000) >> 40,
+      (number & 0xFF000000000000) >> 48,
+      (number & 0xFF00000000000000) >> 56]
 }
 
 function sendCommands()
